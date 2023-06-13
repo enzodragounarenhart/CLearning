@@ -3,7 +3,9 @@
 #endif 
 
 #include <windows.h>
+#include <winbase.h>
 #include <new>
+
 
 /*LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -177,7 +179,7 @@ public:
 
 protected:
 
-    virtual PCWSTR  ClassName() const = 0;
+    virtual PCWSTR  ClassName() = 0;
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
     HWND m_hwnd;
@@ -186,13 +188,35 @@ protected:
 class MainWindow : public BaseWindow<MainWindow>
 {
 public:
-    PCWSTR  ClassName() const { return L"Sample Window Class"; }
-    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    PCWSTR  ClassName() { return L"Sample Window Class"; }
+    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
+        switch (uMsg)
+        {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+
+        case WM_PAINT:
+            {
+                PAINTSTRUCT ps;
+                HDC hdc = BeginPaint(m_hwnd, &ps);
+                FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW+1));
+                EndPaint(m_hwnd, &ps);
+            }
+            return 0;
+
+        default:
+            return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
+        }
+        return TRUE;
+    }
 };
 
-int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
+int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLine, int nShowCmd)
 {
     MainWindow win;
+
 
     if(!win.Create( L"Learn how to Program Windows", WS_OVERLAPPEDWINDOW))
     {

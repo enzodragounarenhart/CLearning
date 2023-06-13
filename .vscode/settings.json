@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "windows.h": "c",
-        "new": "cpp"
+        "new": "cpp",
+        "cstdlib": "cpp"
     }
 }
