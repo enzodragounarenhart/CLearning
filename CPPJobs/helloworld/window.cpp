@@ -4,6 +4,7 @@
 
 #include <windows.h>
 #include <winbase.h>
+#include "basewin.h"
 #include <new>
 
 

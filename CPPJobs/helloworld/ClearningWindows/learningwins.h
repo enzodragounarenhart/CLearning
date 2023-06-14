@@ -1,18 +1,7 @@
-#ifndef UNICODE
-#define UNICODE
-#endif 
+#pragma once
 
-#include <shobjidl.h>
-#include <windows.h>
-#include <new>
-
-interface IDrawable
-{
-    void Draw();
-};
 
 template <class DERIVED_TYPE> 
-
 class BaseWindow
 {
 public:
@@ -82,61 +71,3 @@ protected:
     HWND m_hwnd;
 };
 
-class MainWindow : public BaseWindow<MainWindow>
-{
-public:
-    PCWSTR  ClassName() { return L"Sample Window Class"; }
-    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-};
-
-int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int nShowCmd)
-{
-    MainWindow win;
-
-    if(!win.Create( L"Learn how to Program Windows", WS_OVERLAPPEDWINDOW))
-    {
-        return 0;
-    }
-
-    ShowWindow(win.Window(), nShowCmd);
-
-    MSG msg = { };
-    while(GetMessage(&msg, NULL, 0, 0) > 0)
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
-    return 0;
-}
-LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-    {
-        switch (uMsg)
-        {
-        case WM_LBUTTONDOWN:
-            {
-                wchar_t nomeArquivo[MAX_PATH];
-                HINSTANCE hInstance = GetModuleHandle(NULL);
-
-                GetModuleFileName(hInstance, nomeArquivo, MAX_PATH);
-                MessageBox(MainWindow::m_hwnd, nomeArquivo, L"Esse programa eh: ", MB_OK | MB_ICONINFORMATION);
-            }
-            return 0;
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            return 0;
-
-        case WM_PAINT:
-            {
-                PAINTSTRUCT ps;
-                HDC hdc = BeginPaint(m_hwnd, &ps);
-                FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW+1));
-                EndPaint(m_hwnd, &ps);
-            }
-            return 0;
-
-        default:
-            return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
-        }
-        return TRUE;
-    }
