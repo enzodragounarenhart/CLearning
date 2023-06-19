@@ -4,13 +4,34 @@
 
 #include <shobjidl.h>
 #include <windows.h>
-#include "learningwins.h"
 #include <d2d1.h>
 #include <math.h>
-#pragma comment(lib, "d2d1.lib")
-#pragma comment(lib, "lole32.lib")
-#pragma comment(lib, "loleaut32.lib")
-#pragma comment(lib, "luuid.lib")
+#include <assert.h>
+//#include <atlbase.h>
+
+#include "learningwins.h"
+//#include "lScene.h"
+
+/*class Scene : public GraphicsScene
+{
+    CCompPtr<ID2D1SolidColorBrush> m_pFill;
+    CComPtr<ID2D1SolidColorBrush> m_pStroke;
+
+    D2D1_ELLIPSE m_ellipse;
+    D2D_POINT_2F m_Ticks[24];
+
+    HRESULT CreateDeviceIndependentResources() { return S_OK;}
+    void    DiscardDeviceIndependentResources() { }
+    HRESULT CreateDeviceDependentResources();
+    void    DiscardDeviceDependentResources();
+    void    CalculateLayout();
+    void    RenderScene();
+
+    void DrawClockHand(float fHandLength, float fAngle, float fStrokeWidth);
+
+};
+
+HRESULT Scene::CreateDeviceDependentResources(){}*/
 
 template <class T> void SafeRelease(T **ppT)
 {
@@ -50,9 +71,9 @@ void MainWindow::CalculateLayout()
     {
         D2D1_SIZE_F size = pRenderTarget->GetSize();
         const float x = size.width / 2;
-        const float y = size.height / 2;
+        const float y = size.height / 5;
         const float radius = std::min(x,y);
-        ellipse = D2D1::Ellipse(D2D1::Point2F(x,y), radius, radius);
+        ellipse = D2D1::Ellipse(D2D1::Point2F(x,y), radius, radius*1.33f);
 
     }
 }
@@ -160,7 +181,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
                     // Display the file name to the user.
                     if (SUCCEEDED(hr))
                     {
-                        MessageBox(NULL, pszFilePath, L"File Path", MB_OK);
+                        MessageBoxW(NULL, pszFilePath, L"File Path", MB_OK);
                         CoTaskMemFree(pszFilePath);
                     }
                     pItem->Release();
@@ -170,9 +191,6 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
         }
         CoUninitialize();
     }
-
-    
-    
 
     if(!win.Create( L"How 2 Circle", WS_OVERLAPPEDWINDOW))
     {
@@ -201,7 +219,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 return -1;
             }
             return 0;
-        case WM_LBUTTONDOWN:
+        /*case WM_LBUTTONDOWN:
             {
                 wchar_t nomeArquivo[MAX_PATH];
                 HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -209,7 +227,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 GetModuleFileName(hInstance, nomeArquivo, MAX_PATH);
                 MessageBox(MainWindow::m_hwnd, nomeArquivo, L"Esse programa eh: ", MB_OK | MB_ICONINFORMATION);
             }
-            return 0;
+            return 0;*/
         case WM_CLOSE:
         {
             if (MessageBox(MainWindow::m_hwnd, L"Really quit?", L"Close program", MB_YESNO) == IDYES)

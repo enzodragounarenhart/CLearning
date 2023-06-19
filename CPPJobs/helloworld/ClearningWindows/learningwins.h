@@ -1,5 +1,8 @@
 #pragma once
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Basic class for window creation in C++
+// Derived from the Win32 tutorial at https://learn.microsoft.com/en-us/windows/win32/learnwin32
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 template <class DERIVED_TYPE> 
 class BaseWindow
